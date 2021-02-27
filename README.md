@@ -17,11 +17,13 @@ npm i single-spa-aurelia-framework
     // Aurelia configure method provided in main.ts
     configure: configure,
     // Method to get the active aurelia instance from 'aurelia-dependency-injection'
-    instance: () => Container.instance.get(Aurelia),
+    getInstance: () => Container.instance.get(Aurelia),
     // Manual bootstrap method from 'aurelia-bootstrapper'
     bootstrap: aureliaBootstrap,
     // Your root component, required by setRoot() the called in mount() lifecycle method.
     component: PLATFORM.moduleName('app'),
+    // Logs single-spa lifecycle methods when invoked. Default false.
+    debug: true,
 }
 ```
 
@@ -51,9 +53,10 @@ export async function configure(aurelia: Aurelia) {
 
 const lifecycles = singleSpaAureliaFramework({
     configure,
-    instance: () => Container.instance.get(Aurelia),
+    getInstance: () => Container.instance.get(Aurelia),
     bootstrap: aureliaBootstrap,
     component: PLATFORM.moduleName('app'),
+    debug: true,
 });
 
 export const bootstrap = lifecycles.bootstrap;
