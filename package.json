@@ -1,0 +1,102 @@
+{
+    "name": "single-spa-aurelia-framework",
+    "version": "1.0.0",
+    "description": "Single SPA adapter for Aurela framework (v1).",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "scripts": {
+        "prepare": "npm run build",
+        "prepublishOnly": "npm test && npm run lint",
+        "preversion": "npm run lint",
+        "version": "npm run format && git add -A src",
+        "postversion": "git push && git push --tags",
+        "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+        "lint": "tslint -p tsconfig.json",
+        "build": "tsc",
+        "test": "jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/peterpolman/single-spa-aurelia-framework.git"
+    },
+    "keywords": [
+        "singlespa",
+        "aurelia"
+    ],
+    "author": "Peter Polman",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/peterpolman/single-spa-aurelia-framework/issues"
+    },
+    "homepage": "https://github.com/peterpolman/single-spa-aurelia-framework#readme",
+    "files": [
+        "lib/**/*"
+    ],
+    "dependencies": {
+        "single-spa": "^5.9.1"
+    },
+    "devDependencies": {
+        "@types/jest": "^26.0.20",
+        "@typescript-eslint/eslint-plugin": "^4.15.2",
+        "@typescript-eslint/parser": "^4.15.2",
+        "eslint-config-prettier": "^8.1.0",
+        "eslint-plugin-prettier": "^3.3.1",
+        "jest": "^26.6.3",
+        "prettier": "^2.2.1",
+        "ts-jest": "^26.5.2",
+        "typescript": "^4.2.2"
+    },
+    "eslintConfig": {
+        "parser": "@typescript-eslint/parser",
+        "root": true,
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "prettier/@typescript-eslint",
+            "plugin:prettier/recommended"
+        ],
+        "parserOptions": {
+            "ecmaVersion": 2020,
+            "sourceType": "module"
+        },
+        "rules": {
+            "semi": [
+                "error",
+                "always"
+            ],
+            "quotes": [
+                "error",
+                "single"
+            ],
+            "no-debugger": "off",
+            "no-sparse-arrays": "off",
+            "@typescript-eslint/explicit-function-return-type": "off"
+        },
+        "ignorePatterns": [
+            "test/**/*.{j,t}s?(x)",
+            "dist/*",
+            "src/types/",
+            "**/*.d.ts",
+            "node_modules"
+        ],
+        "overrides": [
+            {
+                "files": [
+                    "**/__tests__/*.{j,t}s?(x)",
+                    "**/tests/unit/**/*.spec.{j,t}s?(x)"
+                ],
+                "env": {
+                    "mocha": true
+                }
+            }
+        ]
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "singleQuote": true,
+        "bracketSpacing": true,
+        "printWidth": 120,
+        "trailingComma": "all",
+        "quoteProps": "consistent"
+    }
+}
