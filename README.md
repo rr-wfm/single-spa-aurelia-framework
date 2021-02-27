@@ -44,7 +44,7 @@ export async function configure(aurelia: Aurelia) {
     // ... your Aurelia configuration
     /*
      * Make sure to not call `aurelia.start()` and `aurelia.setRoot()` on the aurelia instance
-     * in the configure method. This will be handled when the single-spa mount
+     * in this configure method. This will be handled when the single-spa mount
      * lifecycle method is called.
      */
 }
@@ -72,7 +72,6 @@ _./src/config/environment.remote.json_
     "debug": true,
     "testing": true,
     "remote": true
-    # more environment variables
 }
 ```
 
