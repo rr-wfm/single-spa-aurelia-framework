@@ -13,7 +13,7 @@ npm i single-spa-aurelia-framework
 ## Options
 
 ```typescript
-singleSpaAureliaFramework({
+{
     // Aurelia configure method provided in main.ts
     configure: configure,
     // Method to get the active aurelia instance from 'aurelia-dependency-injection'
@@ -22,15 +22,16 @@ singleSpaAureliaFramework({
     bootstrap: aureliaBootstrap,
     // Your root component, required by setRoot() the called in mount() lifecycle method.
     component: PLATFORM.moduleName('app'),
-});
+}
 ```
 
 ## Example integration
 
 This example demonstrates how to expose the Single SPA lifecycle methods with an existing `configure()` method in your main.ts file.
 
+_./src/main.single-spa.ts_
+
 ```typescript
-// ./src/main.single-spa.ts
 import singleSpaAureliaFramework from 'single-spa-aurelia-framework';
 
 // Rename the imported manual bootrap method due to a naming conflict with the
@@ -64,20 +65,22 @@ export const unmount = lifecycles.unmount;
 
 If your project is running webpack, make sure to adjust them to the single-spa [recommended confguration](https://single-spa.js.org/docs/recommended-setup#build-tools-webpack--rollup). This is an example of a seperate `remote` build environment.
 
+_./src/config/environment.remote.json_
+
 ```json
-// ./src/config/environment.remote.json
 {
     "debug": true,
     "testing": true,
     "remote": true
-    // more environment variables
+    # more environment variables
 }
 ```
 
 **Important: This configuration should extend and not replace your current configuration.**
 
+_./webpack.config.js_
+
 ```typescript
-// ./src/webpack.config.js
 module.exports = ({ remote } = {}, { port } = {}) => ({
     // A separate `main.single-spa.ts` entrypoint exposed with `au run --env.remote`.
     entry: remote ? './src/main.single-spa.ts' : './src/main.ts',
