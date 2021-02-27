@@ -2,9 +2,15 @@ import singleSpaAureliaFramework from '../src/index';
 
 test('Function return type', () => {
     const lifecycles = singleSpaAureliaFramework({
-        getInstance: function () {},
-        configure: function () {},
-        bootstrap: function () {},
+        getInstance: function () {
+            return;
+        },
+        configure: function () {
+            return;
+        },
+        bootstrap: function () {
+            return;
+        },
         component: '',
         debug: true,
     });
