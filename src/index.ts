@@ -1,5 +1,13 @@
 import { LifeCycles } from 'single-spa';
 
+export class SingleSpaCustomProps {
+    constructor(props: any) {
+        for (const key in props) {
+            (this as any)[key] = props[key];
+        }
+    }
+}
+
 function log(message: string, debug: boolean) {
     if (debug) {
         console.log(message);
@@ -29,6 +37,8 @@ const bootstrap = async (options: SingleSpaAureliaFrameworkOptions, props: Singl
 
 const mount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpaProps): Promise<unknown> => {
     const aurelia = options.getInstance();
+
+    aurelia.container.registerSingleton(SingleSpaCustomProps, () => props);
 
     await aurelia.start();
     await aurelia.setRoot(options.component, createContainerElement(props.name));
