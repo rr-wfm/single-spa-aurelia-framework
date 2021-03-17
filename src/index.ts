@@ -1,10 +1,12 @@
 import { LifeCycles } from 'single-spa';
 
 export class SingleSpaCustomProps {
-    constructor(props: any) {
-        for (const key in props) {
-            (this as any)[key] = props[key];
-        }
+    name: string;
+    accessToken: string;
+
+    constructor({ name, accessToken }: { name: string; accessToken: string }) {
+        this.name = name;
+        this.accessToken = accessToken;
     }
 }
 
