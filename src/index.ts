@@ -4,9 +4,9 @@ export class SingleSpaCustomProps {
     name: string;
     accessToken: string;
 
-    constructor(props: { name: string; accessToken: string }) {
-        this.name = props && props.name;
-        this.accessToken = props && props.accessToken;
+    constructor(props: any) {
+        this.name = props.name;
+        this.accessToken = props.accessToken;
     }
 }
 
