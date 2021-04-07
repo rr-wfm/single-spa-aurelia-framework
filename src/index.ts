@@ -1,6 +1,8 @@
 import { Aurelia, Controller } from 'aurelia-framework';
 import { LifeCycleFn, LifeCycles } from 'single-spa';
 
+type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N;
+
 export type SingleSpaProps = {
     name: string;
     payload: unknown;
@@ -14,9 +16,14 @@ export type SingleSpaAureliaFrameworkOptions = {
     debug: boolean;
 };
 
-export type AureliaInstance = Aurelia & {
-    root: Controller;
-};
+export type AureliaInstance = Merge<
+    Aurelia,
+    {
+        root: Controller;
+        host: Element | null;
+        hostConfigured: boolean;
+    }
+>;
 
 export class SingleSpaCustomProps {
     name: string;
@@ -77,8 +84,8 @@ const unmount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleS
     aurelia.root.detached();
     aurelia.root.unbind();
 
-    aurelia['host'] = null;
-    aurelia['hostConfigured'] = false;
+    aurelia.host = null;
+    aurelia.hostConfigured = false;
 
     log(`${props.name} has been unmounted!`, options.debug);
 
@@ -89,7 +96,7 @@ export default function singleSpaAureliaFramework(options: SingleSpaAureliaFrame
     log('The registered application has been loaded!', options.debug);
 
     if (typeof options !== 'object') {
-        throw new Error('single-spa-aurelia requires a configuration object');
+        throw new Error('single-spa-aurelia-framework requires a configuration object');
     }
 
     if (typeof options.configure !== 'function') {
