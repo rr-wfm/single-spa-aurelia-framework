@@ -64,6 +64,39 @@ export const mount = lifecycles.mount;
 export const unmount = lifecycles.unmount;
 ```
 
+## Example registerApplication() & customProps()
+
+If you want to pass data to the child applications when mounting you can use the `customProps` method available in single-spa's `registerApplication()`. Make sure to provide your data in the demonstrated format since the `SingleSpaAureliaCustomProps` singleton in your instance will only expose the payload property.
+
+```typescript
+registerApplication({
+    name: '@organisation/application',
+    app: () => System.import('@organisation/application'),
+    activeWhen: ['/route1', '/route2'],
+    customProps: () => {
+        return {
+            payload: {
+                user: user,
+                locale: locale,
+            },
+        };
+    },
+});
+```
+
+Your Aurelia view model can then use regular DI to read the props registered for the instance.
+
+```typescript
+@autoinject
+export class SessionManager {
+    user: User;
+
+    constructor(readonly props: SingleSpaCustomProps) {
+        this.user = this.props['user'];
+    }
+}
+```
+
 ## Example Webpack configuration
 
 If your project is running webpack, make sure to adjust them to the single-spa [recommended confguration](https://single-spa.js.org/docs/recommended-setup#build-tools-webpack--rollup). This is an example of a seperate `remote` build environment.

@@ -66,7 +66,7 @@ const mount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpa
     const aurelia = options.getInstance();
 
     aurelia.container.registerSingleton(SingleSpaCustomProps, function () {
-        return props;
+        return props.payload;
     });
 
     await aurelia.start();
