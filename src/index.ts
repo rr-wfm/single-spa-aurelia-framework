@@ -1,12 +1,30 @@
-import { LifeCycles } from 'single-spa';
+import { Aurelia, Controller } from 'aurelia-framework';
+import { LifeCycleFn, LifeCycles } from 'single-spa';
+
+export type SingleSpaProps = {
+    name: string;
+    payload: unknown;
+};
+
+export type SingleSpaAureliaFrameworkOptions = {
+    getInstance: () => AureliaInstance;
+    configure: (aurelia: AureliaInstance) => Promise<void>;
+    bootstrap: (configure: (aurelia: AureliaInstance) => Promise<void>) => Promise<void>;
+    component: string;
+    debug: boolean;
+};
+
+export type AureliaInstance = Aurelia & {
+    root: Controller;
+};
 
 export class SingleSpaCustomProps {
     name: string;
-    accessToken: string;
+    payload: unknown;
 
-    constructor(props: any) {
+    constructor(props: { name: string; payload: unknown }) {
         this.name = props.name;
-        this.accessToken = props.accessToken;
+        this.payload = props.payload;
     }
 }
 
@@ -37,10 +55,12 @@ const bootstrap = async (options: SingleSpaAureliaFrameworkOptions, props: Singl
     return Promise.resolve();
 };
 
-const mount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpaProps): Promise<unknown> => {
+const mount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpaProps): Promise<void> => {
     const aurelia = options.getInstance();
 
-    aurelia.container.registerSingleton(SingleSpaCustomProps, () => props);
+    aurelia.container.registerSingleton(SingleSpaCustomProps, function () {
+        return props;
+    });
 
     await aurelia.start();
     await aurelia.setRoot(options.component, createContainerElement(props.name));
@@ -50,12 +70,12 @@ const mount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpa
     return Promise.resolve();
 };
 
-const unmount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpaProps): Promise<unknown> => {
-    const aurelia = options.getInstance();
+const unmount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpaProps): Promise<void> => {
+    const aurelia: AureliaInstance = options.getInstance();
 
-    aurelia['root'].view.removeNodes();
-    aurelia['root'].detached();
-    aurelia['root'].unbind();
+    aurelia.root.view.removeNodes();
+    aurelia.root.detached();
+    aurelia.root.unbind();
 
     log(`${props.name} has been unmounted!`, options.debug);
 
@@ -66,7 +86,7 @@ export default function singleSpaAureliaFramework(options: SingleSpaAureliaFrame
     log('The registered application has been loaded!', options.debug);
 
     if (typeof options !== 'object') {
-        throw Error('single-spa-aurelia requires a configuration object');
+        throw new Error('single-spa-aurelia requires a configuration object');
     }
 
     if (typeof options.configure !== 'function') {
@@ -78,8 +98,8 @@ export default function singleSpaAureliaFramework(options: SingleSpaAureliaFrame
     }
 
     return {
-        bootstrap: bootstrap.bind(null, options),
-        mount: mount.bind(null, options),
-        unmount: unmount.bind(null, options),
+        bootstrap: bootstrap.bind(null, options) as LifeCycleFn<any>,
+        mount: mount.bind(null, options) as LifeCycleFn<any>,
+        unmount: unmount.bind(null, options) as LifeCycleFn<any>,
     };
 }
