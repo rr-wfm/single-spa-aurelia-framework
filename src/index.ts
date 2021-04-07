@@ -77,6 +77,9 @@ const unmount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleS
     aurelia.root.detached();
     aurelia.root.unbind();
 
+    aurelia['host'] = null;
+    aurelia['hostConfigured'] = false;
+
     log(`${props.name} has been unmounted!`, options.debug);
 
     return Promise.resolve();
