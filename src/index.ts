@@ -9,14 +9,14 @@ export type SingleSpaProps = {
 };
 
 export type SingleSpaAureliaFrameworkOptions = {
-    getInstance: () => AureliaInstance;
-    configure: (aurelia: AureliaInstance) => Promise<void>;
-    bootstrap: (configure: (aurelia: AureliaInstance) => Promise<void>) => Promise<void>;
+    getInstance: () => Aurelia;
+    configure: (aurelia: Aurelia) => Promise<void>;
+    bootstrap: (configure: (aurelia: Aurelia) => Promise<void>) => Promise<void>;
     component: string;
     debug: boolean;
 };
 
-export type AureliaInstance = Merge<
+type AureliaInstance = Merge<
     Aurelia,
     {
         root: Controller;
@@ -78,7 +78,7 @@ const mount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpa
 };
 
 const unmount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleSpaProps): Promise<void> => {
-    const aurelia: AureliaInstance = options.getInstance();
+    const aurelia: AureliaInstance = options.getInstance() as AureliaInstance;
 
     aurelia.root.view.removeNodes();
     aurelia.root.detached();
