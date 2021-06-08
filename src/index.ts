@@ -84,6 +84,12 @@ const unmount = async (options: SingleSpaAureliaFrameworkOptions, props: SingleS
     aurelia.root.detached();
     aurelia.root.unbind();
 
+    const viewModel: any = aurelia.root.viewModel;
+    if (viewModel && viewModel.router) {
+        viewModel.router.deactivate();
+        viewModel.router.reset();
+    }
+
     aurelia.host = null;
     aurelia.hostConfigured = false;
 
